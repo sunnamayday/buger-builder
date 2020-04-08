@@ -9,8 +9,11 @@ import BackDrop from '../BackDrop/BackDrop';
 **/
 
 class Modal extends Component {
+
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.show !== this.props.show;
+        // if show property and children are different from the previous 
+        // props, it trigger the updates. e.g OrderSummary changes
+        return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
     }
     render() {
         return (
