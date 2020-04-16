@@ -8,7 +8,7 @@ import axios from '../../axios-order';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler';
 import { connect } from 'react-redux';
-import * as actionType from '../../store/action';
+import * as actionCreators from '../../store/actions/index';
 
 /**
 * @author
@@ -17,17 +17,11 @@ import * as actionType from '../../store/action';
 
 class BurgerBuilder extends Component {
     state = {
-        // purchasable: false,
-        purchasing: false,
-        loading: false,
-        error: false
+        purchasing: false
     }
 
     componentDidMount() {
-        // axios.get("/ingredients.json")
-        //     .then(response => {
-        //         this.setState({ ingredients: response.data });
-        //     }).catch(error => { this.setState({ error: true }) })
+        this.props.onIniteIngredients();
     }
 
     // Have to use =()=>{}; otherwise you will get an error
@@ -40,6 +34,7 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContineHandler = () => {
+        this.props.onInitPurchase();
         this.props.history.push('/checkout');
     }
 
@@ -61,7 +56,7 @@ class BurgerBuilder extends Component {
             disabledInfo[key] = disabledInfo[key] <= 0;
         }
         let orderSummary = null;
-        let burger = this.state.error ? <p>The ingredients cannot be loaded</p> : <Spinner />;
+        let burger = this.props.error ? <p>The ingredients cannot be loaded</p> : <Spinner />;
 
         if (this.props.ings) {
             burger = (
@@ -97,21 +92,20 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalPrice
+        ings: state.burgerbuilder.ingredients,
+        price: state.burgerbuilder.totalPrice,
+        error: state.order.error,
+        purchased: state.order.purchased
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        addIngredients: (igName) => dispatch({
-            type: actionType.ADD_INGREDIENT,
-            ingredientName: igName
-        }),
-        removeIngredients: (igName) => dispatch({
-            type: actionType.REMOVE_INGREDIENT,
-            ingredientName: igName
-        })
+        addIngredients: (igName) => dispatch(actionCreators.addIngredient(igName)),
+        removeIngredients: (igName) => dispatch(actionCreators.removeIngredient(igName)),
+        onIniteIngredients: () => dispatch(actionCreators.initeIngredient()),
+        onInitPurchase: () => dispatch(actionCreators.initPurchase())
+
     }
 }
 
