@@ -85,7 +85,6 @@ class Auth extends Component {
     }
 
     submitHandler = (event) => {
-        console.log('submithandler')
         event.preventDefault();
         this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignUp);
     }
@@ -125,19 +124,24 @@ class Auth extends Component {
             error = <p>{this.props.error.message}</p>
         }
 
-        let authenticatedPath = null;
+        let authenticated = null;
+        console.log(this.props.token)
+        console.log(this.props.isAuthenticated)
+        console.log(this.props.authenticatedPath)
+
         if (this.props.isAuthenticated) {
-            authenticatedPath = <Redirect to={this.props.authenticatedPath} />
+            authenticated = <Redirect to={this.props.authenticatedPath} />
         }
 
         return (
             <div className={classes.Auth}>
-                {authenticatedPath}
+                {authenticated}
                 {error}
                 <form onSubmit={this.submitHandler}>
                     {form}
                     <Button btnType='Success'>Submit</Button>
                 </form>
+                
                 <Button clicked={this.switchModeHandler}
                     btnType='Danger'>
                     Switch to {this.state.isSignUp ? 'Sign up' : 'Sign in'}
@@ -154,7 +158,8 @@ const mapStateToProps = state => {
         error: state.auth.error,
         isAuthenticated: state.auth.token !== null,
         burgerBuilding: state.burgerbuilder.building,
-        authenticatedPath: state.auth.path
+        authenticatedPath: state.auth.path,
+        token: state.auth.token
     }
 }
 

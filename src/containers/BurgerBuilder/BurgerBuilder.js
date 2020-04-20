@@ -104,7 +104,8 @@ const mapStateToProps = state => {
         price: state.burgerbuilder.totalPrice,
         error: state.order.error,
         purchased: state.order.purchased,
-        isAuthenticated: state.auth.token !== null
+        isAuthenticated: state.auth.token !== null,
+        authenticatedPath: state.auth.path
     }
 }
 
