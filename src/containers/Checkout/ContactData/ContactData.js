@@ -5,7 +5,7 @@ import axios from '../../../axios-order';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import { connect } from 'react-redux';
-import withErrorHandler  from '../../../hoc/withErrorHandler';
+import withErrorHandler from '../../../hoc/withErrorHandler';
 import * as orderAction from '../../../store/actions/index';
 /**
 * @author
@@ -110,9 +110,10 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ings,
             price: this.props.price,
-            order: this.state.orderForm
+            order: this.state.orderForm,
+            userId: this.props.userId
         }
-        this.props.onOrderBurger(order);
+        this.props.onOrderBurger(this.props.token, order);
         // this.props.
     }
 
@@ -193,13 +194,15 @@ const mapStateToProps = state => {
     return {
         ings: state.burgerbuilder.ingredients,
         price: state.burgerbuilder.totalPrice,
-        loading: state.order.loading
+        loading: state.order.loading,
+        token: state.auth.token,
+        userId: state.auth.userId
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onOrderBurger: (orderData) => dispatch(orderAction.purchaseBurger(orderData))
+        onOrderBurger: (token, orderData) => dispatch(orderAction.purchaseBurger(token, orderData))
     }
 }
 

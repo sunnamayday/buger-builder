@@ -3,7 +3,7 @@ import classes from './Toolbar.module.css';
 import Logo from '../../Logo/Logo';
 import NavigationItems from '../NavigationItems/NavigationItems';
 import DrawToggle from '../SideDrawer/DrawToggle/DrawToggle';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 /**
 * @author
@@ -18,7 +18,7 @@ const Toolbar = (props) => {
                 <Logo />
             </NavLink>
             <nav className={classes.Desktop}>
-                <NavigationItems />
+                <NavigationItems isAuthenticated={props.isAuth} />
             </nav>
         </header>
     )

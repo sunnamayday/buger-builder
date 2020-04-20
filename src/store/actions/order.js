@@ -22,10 +22,10 @@ export const purchaseBurgerStart = () => {
     }
 }
 
-export const purchaseBurger = (orderData) => {
-        return dispatch => {
-            dispatch(purchaseBurgerStart());
-            axios.post('/order.json', orderData)
+export const purchaseBurger = (token, orderData) => {
+    return dispatch => {
+        dispatch(purchaseBurgerStart());
+        axios.post('/order.json?auth=' + token, orderData)
             .then(response => {
                 // purchasing: false to close the modal
                 dispatch(purchaseBurgerSuccess(response.data.name, orderData))
@@ -33,7 +33,7 @@ export const purchaseBurger = (orderData) => {
                 console.log(error);
                 dispatch(purchaseBurgerFail(error))
             });
-    } 
+    }
 }
 
 export const initPurchase = () => {
@@ -56,9 +56,11 @@ export const fetchOrderFail = (error) => {
     }
 }
 
-export const fetchOrder = (orders) => {
+export const fetchOrder = (token, userId) => {
     return dispatch => {
-        axios.get('/order.json').
+        // TODO
+        const queryParam = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
+        axios.get('/order.json' + queryParam).
             then(res => {
                 const fetchedOrder = [];
                 for (let key in res.data) {
