@@ -7,6 +7,7 @@ import Input from '../../../components/UI/Input/Input';
 import { connect } from 'react-redux';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import * as orderAction from '../../../store/actions/index';
+import { updateObject, checkValidity } from '../../../shared/utility';
 /**
 * @author
 * @class ContactData
@@ -118,40 +119,23 @@ class ContactData extends Component {
     }
 
     inputChangedHandler = (event, inputIdentifier) => {
-        const updatedOrderForm = {
-            ...this.state.orderForm
-        };
-        const updatedFormElement = {
-            ...updatedOrderForm[inputIdentifier]
-        };
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
-        updatedFormElement.touched = true;
-        updatedOrderForm[inputIdentifier] = updatedFormElement;
 
+        const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier],
+            {
+                value: event.target.value,
+                valid: checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation),
+                touched: true
+            })
+        
+        const updatedOrderForm = updateObject(this.state.orderForm, {
+            [inputIdentifier]: updatedFormElement
+        })
+        
         let formIsValid = true;
         for (let inputIdentifier in updatedOrderForm) {
             formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
         }
         this.setState({ orderForm: updatedOrderForm, formValid: formIsValid });
-    }
-
-    checkValidity(value, rule) {
-        let isValid = true;
-        if (!rule) {
-            return true;
-        }
-        if (rule.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-        if (rule.minLength) {
-            isValid = isValid && value.length >= rule.minLength;
-        }
-
-        if (rule.maxLength) {
-            isValid = isValid && value.length <= rule.maxLength
-        }
-        return isValid;
     }
 
     render() {

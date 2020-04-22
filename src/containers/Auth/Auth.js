@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import { Redirect } from 'react-router-dom';
+import { updateObject, checkValidity } from '../../shared/utility';
 
 /**
 * @author
@@ -55,32 +56,17 @@ class Auth extends Component {
 
     }
 
-    checkValidity = (value, rule) => {
-        let isValid = true;
-        if (!rule) return true;
-
-        if (rule.required) {
-            isValid = isValid && value.trim() !== ''
-        }
-
-        if (rule.isEmail) {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            isValid = pattern.test(value) && isValid
-        }
-        return isValid;
-    }
+    
 
     inputChangedHandler = (event, elementName) => {
-
-        const updatedControls = {
-            ...this.state.controls,
-            [elementName]: {
-                ...this.state.controls[elementName],
+        const updatedControls = updateObject(this.state.controls, {
+            [elementName]: updateObject(this.state.controls[elementName], {
                 value: event.target.value,
-                valid: this.checkValidity(event.target.value, this.state.controls[elementName].validation),
+                valid: checkValidity(event.target.value, this.state.controls[elementName].validation),
                 touched: true
-            }
-        };
+            })
+        })
+
         this.setState({ controls: updatedControls });
     }
 
@@ -125,10 +111,6 @@ class Auth extends Component {
         }
 
         let authenticated = null;
-        console.log(this.props.token)
-        console.log(this.props.isAuthenticated)
-        console.log(this.props.authenticatedPath)
-
         if (this.props.isAuthenticated) {
             authenticated = <Redirect to={this.props.authenticatedPath} />
         }
@@ -141,7 +123,7 @@ class Auth extends Component {
                     {form}
                     <Button btnType='Success'>Submit</Button>
                 </form>
-                
+
                 <Button clicked={this.switchModeHandler}
                     btnType='Danger'>
                     Switch to {this.state.isSignUp ? 'Sign up' : 'Sign in'}

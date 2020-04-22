@@ -30,7 +30,6 @@ export const purchaseBurger = (token, orderData) => {
                 // purchasing: false to close the modal
                 dispatch(purchaseBurgerSuccess(response.data.name, orderData))
             }).catch(error => {
-                console.log(error);
                 dispatch(purchaseBurgerFail(error))
             });
     }
