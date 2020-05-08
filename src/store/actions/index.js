@@ -1,13 +1,20 @@
 export {
     addIngredient,
     removeIngredient,
-    initeIngredient
+    initeIngredient,
+    setIngredients,
+    fetchIngredientsFailed
 } from './burgerbuilder';
 
 export {
     purchaseBurger,
     initPurchase,
-    fetchOrder
+    fetchOrder,
+    fetchOrderSuccess,
+    fetchOrderFail,
+    purchaseBurgerSuccess,
+    purchaseBurgerFail,
+    purchaseBurgerStart
 } from './order';
 
 export {

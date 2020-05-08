@@ -23,15 +23,10 @@ export const purchaseBurgerStart = () => {
 }
 
 export const purchaseBurger = (token, orderData) => {
-    return dispatch => {
-        dispatch(purchaseBurgerStart());
-        axios.post('/order.json?auth=' + token, orderData)
-            .then(response => {
-                // purchasing: false to close the modal
-                dispatch(purchaseBurgerSuccess(response.data.name, orderData))
-            }).catch(error => {
-                dispatch(purchaseBurgerFail(error))
-            });
+    return {
+        type: actionTypes.PURCHASE_BURGER,
+        token: token,
+        orderData: orderData
     }
 }
 
@@ -56,21 +51,9 @@ export const fetchOrderFail = (error) => {
 }
 
 export const fetchOrder = (token, userId) => {
-    return dispatch => {
-        // TODO
-        const queryParam = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
-        axios.get('/order.json' + queryParam).
-            then(res => {
-                const fetchedOrder = [];
-                for (let key in res.data) {
-                    fetchedOrder.push({
-                        ...res.data[key],
-                        id: key
-                    })
-                }
-                dispatch(fetchOrderSuccess(fetchedOrder))
-            }).catch(error => {
-                dispatch(fetchOrderFail(error))
-            })
+    return {
+        type: actionTypes.FETCH_ORDER,
+        token: token,
+        userId: userId
     }
 }
