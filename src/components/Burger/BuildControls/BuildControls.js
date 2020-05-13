@@ -14,7 +14,7 @@ const controls = [
     { label: "Bacon", type: "bacon" }
 ]
 
-const BuildControls = (props) => {
+const BuildControls = props => {
     return (
         <div className={classes.BuildControls}>
             <p>Current Price: <strong>{props.price.toFixed(2)}</strong></p>
